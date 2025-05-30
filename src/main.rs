@@ -1,14 +1,13 @@
 use std::io;
 
-use actix_files::{Files};
 use actix_session::{Session, SessionMiddleware, storage::CookieSessionStore};
 use actix_web::{
-    App, HttpRequest, HttpResponse, HttpServer, Responder, Result, error, get,
+    App, Either, HttpRequest, HttpResponse, HttpServer, Responder, Result, error, get,
     http::{
         Method, StatusCode,
         header::{self, ContentType},
     },
-    middleware, web,
+    web,
 };
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 64];
@@ -30,6 +29,17 @@ async fn index(req: HttpRequest, session: Session) -> Result<HttpResponse> {
         .body(include_str!("../static/index.html")))
 }
 
+async fn default_handler(req_method: Method) -> Result<impl Responder> {
+    match req_method {
+        Method::GET => {
+            Ok(Either::Left(HttpResponse::Found()
+                .insert_header((header::LOCATION, "/"))
+                .finish()))
+        }
+        _ => Ok(Either::Right(HttpResponse::MethodNotAllowed().finish())),
+    }
+}
+
 #[actix_web::main]
 async fn main() -> io::Result<()> {
     let key = actix_web::cookie::Key::from(SESSION_SIGNING_KEY);
@@ -42,16 +52,7 @@ async fn main() -> io::Result<()> {
                     .build(),
             )
             .service(index)
-            .service(Files::new("/static", "static").show_files_listing())
-            // redirect to index
-            .service(
-                web::resource("/index").route(web::get().to(|req: HttpRequest| async move {
-                    println!("{req:?}");
-                    HttpResponse::Found()
-                        .insert_header((header::LOCATION, "/"))
-                        .finish()
-                })),
-            )
+            .default_service(web::to(default_handler))        
     })
     .bind(("0.0.0.0", 8080))?
     .run()
