@@ -13,7 +13,7 @@ use actix_web::{
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 64];
 
-#[get("/index")]
+#[get("/")]
 async fn index(req: HttpRequest, session: Session) -> Result<HttpResponse> {
     println!("{req:?}");
 
@@ -45,10 +45,10 @@ async fn main() -> io::Result<()> {
             .service(Files::new("/static", "static").show_files_listing())
             // redirect to index
             .service(
-                web::resource("/").route(web::get().to(|req: HttpRequest| async move {
+                web::resource("/index").route(web::get().to(|req: HttpRequest| async move {
                     println!("{req:?}");
                     HttpResponse::Found()
-                        .insert_header((header::LOCATION, "index"))
+                        .insert_header((header::LOCATION, "/"))
                         .finish()
                 })),
             )
