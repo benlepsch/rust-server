@@ -48,7 +48,7 @@ async fn main() -> io::Result<()> {
                 web::resource("/").route(web::get().to(|req: HttpRequest| async move {
                     println!("{req:?}");
                     HttpResponse::Found()
-                        .insert_header((header::LOCATION, "static/index.html"))
+                        .insert_header((header::LOCATION, "index"))
                         .finish()
                 })),
             )
