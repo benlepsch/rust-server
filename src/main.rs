@@ -26,7 +26,7 @@ async fn index(req: HttpRequest, session: Session) -> Result<HttpResponse> {
 
     Ok(HttpResponse::build(StatusCode::OK)
         .content_type(ContentType::html())
-        .body(include_str!("../build/index.html")))
+        .body(include_str!("build/index.html")))
 }
 
 async fn default_handler(req_method: Method) -> Result<impl Responder> {
@@ -52,7 +52,7 @@ async fn main() -> io::Result<()> {
                     .build(),
             )
             .service(index)
-            .default_service(web::to(default_handler))        
+            // .default_service(web::to(default_handler))        
     })
     .bind(("0.0.0.0", 8080))?
     .run()
