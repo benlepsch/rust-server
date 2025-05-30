@@ -26,7 +26,7 @@ async fn index(req: HttpRequest, session: Session) -> Result<HttpResponse> {
 
     Ok(HttpResponse::build(StatusCode::OK)
         .content_type(ContentType::html())
-        .body(include_str!("../static/index.html")))
+        .body(include_str!("../build/index.html")))
 }
 
 async fn default_handler(req_method: Method) -> Result<impl Responder> {
