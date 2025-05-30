@@ -2,7 +2,7 @@ use std::io;
 
 use actix_session::{Session, SessionMiddleware, storage::CookieSessionStore};
 use actix_web::{
-    App, Either, HttpRequest, HttpResponse, HttpServer, Responder, Result, error, get,
+    App, Either, HttpRequest, HttpResponse, HttpServer, Responder, Result, get,
     http::{
         Method, StatusCode,
         header::{self, ContentType},
