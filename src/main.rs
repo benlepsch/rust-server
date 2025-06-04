@@ -9,6 +9,7 @@ use actix_web::{
     },
     web,
 };
+use actix_files::Files;
 
 static SESSION_SIGNING_KEY: &[u8] = &[0; 64];
 
@@ -26,7 +27,7 @@ async fn index(req: HttpRequest, session: Session) -> Result<HttpResponse> {
 
     Ok(HttpResponse::build(StatusCode::OK)
         .content_type(ContentType::html())
-        .body(include_str!("build/index.html")))
+        .body(include_str!("../build/index.html")))
 }
 
 async fn default_handler(req_method: Method) -> Result<impl Responder> {
@@ -52,6 +53,7 @@ async fn main() -> io::Result<()> {
                     .build(),
             )
             .service(index)
+            .service(Files::new("/static", "build").show_files_listing())
             // .default_service(web::to(default_handler))        
     })
     .bind(("0.0.0.0", 8080))?
