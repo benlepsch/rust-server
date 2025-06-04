@@ -53,7 +53,7 @@ async fn main() -> io::Result<()> {
                     .build(),
             )
             .service(index)
-            .service(Files::new("/static", "build"))
+            .service(Files::new("/", "build"))
             .default_service(web::to(default_handler))        
     })
     .bind(("0.0.0.0", 8080))?
