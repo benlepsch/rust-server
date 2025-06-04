@@ -33,9 +33,9 @@ async fn index(req: HttpRequest, session: Session) -> Result<HttpResponse> {
 async fn default_handler(req_method: Method) -> Result<impl Responder> {
     match req_method {
         Method::GET => {
-            Ok(Either::Left(HttpResponse::Found()
-                .insert_header((header::LOCATION, "/"))
-                .finish()))
+            Ok(Either::Left(HttpResponse::build(StatusCode::OK)
+                .content_type(ContentType::html())
+                .body(include_str!("../build/index.html"))))
         }
         _ => Ok(Either::Right(HttpResponse::MethodNotAllowed().finish())),
     }
@@ -53,8 +53,8 @@ async fn main() -> io::Result<()> {
                     .build(),
             )
             .service(index)
-            .service(Files::new("/static", "build").show_files_listing())
-            // .default_service(web::to(default_handler))        
+            .service(Files::new("/static", "build"))
+            .default_service(web::to(default_handler))        
     })
     .bind(("0.0.0.0", 8080))?
     .run()
