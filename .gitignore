@@ -1,4 +1,4 @@
-react-app/node_modules/*
+react-app/node_modules
 react-app/dist/*
 build/*
 /target
