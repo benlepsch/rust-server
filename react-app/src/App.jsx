@@ -1,8 +1,17 @@
-import { React, useState } from 'react'
+import { React, useState } from 'react';
 import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 
 function Home() {
-    return <p>Welcome home</p>;
+    const responseMessage = (r) => {
+        console.log(r);
+    };
+
+    return (
+        <div>
+            <GoogleLogin onSuccess={responseMessage} onError={responseMessage} />
+        </div>
+    );
 }
 
 function PageNotFound() {
