@@ -1,27 +1,34 @@
 import { React, useState } from 'react';
 import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 
-function Home() {
-    const responseMessage = (r) => {
-        console.log(r);
-    };
+import Home from './pages/Home';
+import Frame from './pages/Frame';
+import PageNotFound from './pages/404';
 
-    return (
-        <div>
-            <GoogleLogin onSuccess={responseMessage} onError={responseMessage} />
-        </div>
+function Navigation() {
+   return (
+        <header class="flexy flex-row">
+            <div class="flexy flex-row nav-link">
+                <Link to='/'>Home</Link>
+            </div>
+            <div class="flexy flex-row nav-link">
+                <Link to='/pictures'>Pictures</Link>
+            </div>
+            <div class="flexy flex-row nav-link">
+                <a href="https://sbcord.com/" target="_blank" rel="noopener noreferrer">Friends</a>
+            </div>
+            <div class="flexy flex-row nav-link">
+                <a href="https://bleps.ch/">Back to main website</a>
+            </div>
+        </header>
     );
-}
-
-function PageNotFound() {
-    return <p>Not a real page bozo</p>;
 }
 
 function Main() {
     return (
         <Routes>
             <Route exact path='/' element={<Home />}></Route>
+            <Route exact path='/pictures' element={<Frame />}></Route>
 
             <Route path='*' element={<PageNotFound />}></Route>
         </Routes>
@@ -32,6 +39,7 @@ function Main() {
 function App() {
     return (
         <BrowserRouter>
+            <Navigation />
             <Main />
         </BrowserRouter>
     );
